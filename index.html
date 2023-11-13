@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grouped To-Do List</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,400;1,700&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&family=Lugrasimo&family=Marhey:wght@300;400;500;600;700&family=Noto+Kufi+Arabic:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Preahvihear&family=REM:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,300;0,400;1,300;1,500&display=swap');
+
+
+        ::-webkit-scrollbar-track {
+    background-color:#c3c300;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #000;
+}
+
+  /* Customize the scrollbar thumb */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+
+
+        html{
+            font-family: 'Marhey', cursive;
+            text-transform: capitalize;
+        }
+        body{
+            background-color: #fff;
+            max-height: 95vh;
+            max-width: 100%;
+            /* border: 1px solid #c3c300;
+            border-radius: 20px; */
+            padding: 10px;
+            text-align: center;
+            font-family: 'Marhey', cursive;
+        }
+
+        #app{
+            font-family: 'Marhey', cursive;
+            height: 95vh;
+            max-width: 100%;
+            margin-bottom: 50px;
+            border-radius: 20px;
+            text-align: center;
+            display: block;
+        }
+
+        #app .gym{
+            border-radius: 30px;
+            height: 200px;
+            width: 250px;
+            text-align: center;
+        }
+
+        #app .addnew{
+            background-color: transparent;
+            border: 1px dashed #c3c300;
+            padding: 3px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-family: 'Marhey', cursive;
+            text-transform: uppercase;
+        }
+
+        #app .addtask{
+            background-color: #c3c300;
+            border: 1px solid transparent;
+            padding: 3px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-family: 'Marhey', cursive;
+            text-transform: uppercase;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #app .select{
+            background-color: #c3c300;
+            border: 1px dashed #000;
+            padding: 3px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-family: 'Marhey', cursive;
+            text-transform: uppercase;
+        }
+
+        #app .color{
+            display: none;
+        }
+        
+        #app .group {
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #e7e73e;
+            border-radius: 20px;
+            /* display: flex; */
+            text-align: center;
+            width: 250px;
+        }
+
+        #app .group h2{
+            text-align: center;
+            width: 250px;
+        }
+
+        #app #deleteGroup{
+            border: none;
+            color:#c3c300;
+            font-weight: 700;
+            padding-right: 20px;
+        }
+
+        #app .deletbutton{
+            color: #c3c300;
+            font-size: 25px;
+            font-weight: 700;
+            padding-top: 15px;
+            user-select: none;
+        }
+
+        #app #deleteGroup .option{
+            background-color: #c3c300;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <h1> WORKOUT</h1>
+
+        <img src="Rectangle 1.png" class="gym" alt="photo">
+
+        <div>
+            <label for="deleteGroup" class="name">DELETE</label>
+            <select id="deleteGroup" v-model="groupToDelete">
+                <option v-for="(group, index) in groups" :key="index" :value="index" class="option">{{ group.number }}. {{ group.title }}</option>
+            </select>
+            <a @click="deleteGroup" class="deletbutton">&times;</a>
+        </div>
+
+        <!-- Input for Group -->
+        <div>
+            <input type="text" v-model="newGroupTitle" placeholder="Enter group title" class="addnew">
+            <input type="color" v-model="newGroupColor" class="color">
+            <button @click="addGroup" class="addtask">Add Group</button>
+        </div>
+    
+        <!-- Input for Task -->
+        <div>
+            <input type="text" v-model="newTask" placeholder="Add a new task" class="addnew">
+            <select v-model="selectedGroup" class="select">
+                <option v-for="(group, index) in groups" :key="index" :value="index">{{ group.number }}. {{ group.title }}</option>
+            </select>
+            <button @click="addTask" class="addtask">Add Task</button>
+        </div>
+
+        <!-- Display tasks and groups -->
+        <div v-for="(group, index) in groups" :key="index" :style="{ backgroundColor: group.color }" class="group">
+            <h2>{{ group.number }}. {{ group.title }}</h2>
+            <ul>
+                <li v-for="(task, taskIndex) in group.tasks" :key="taskIndex" class="task">
+                    {{ task.number }}. {{ task.title }}
+                    <!-- <a @click="removeTask(index, taskIndex)">&times;</a> -->
+                </li>
+            </ul>
+            <!-- <a @click="removeGroup(index)" class="x">&times;</a> -->
+        </div>
+    </div>
+    </div>
+
+    <!-- Vue.js CDN (you can replace this with a local copy) -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                newGroupTitle: '',
+                newGroupColor: '#c3c300',
+                newTask: '',
+                selectedGroup: 0,
+                groupToDelete: null,
+                groups: []
+            },
+            mounted() {
+                // Load data from localStorage when the component is mounted
+                const savedData = localStorage.getItem('todoData');
+                if (savedData) {
+                    this.groups = JSON.parse(savedData);
+                }
+            },
+            methods: {
+                saveData: function () {
+                    // Save data to localStorage
+                    localStorage.setItem('todoData', JSON.stringify(this.groups));
+                },
+                addGroup: function () {
+                    if (this.newGroupTitle.trim() !== '') {
+                        this.groups.push({
+                            number: this.groups.length + 1,
+                            title: this.newGroupTitle.trim(),
+                            color: this.newGroupColor,
+                            tasks: []
+                        });
+                        this.newGroupTitle = '';
+                        this.newGroupColor = '#c3c300'; // reset color for the next group
+                        this.saveData();
+                    }
+                },
+                addTask: function () {
+                    if (this.newTask.trim() !== '' && this.groups.length > 0) {
+                        const selectedGroupIndex = parseInt(this.selectedGroup);
+                        this.groups[selectedGroupIndex].tasks.push({
+                            number: this.groups[selectedGroupIndex].tasks.length + 1,
+                            title: this.newTask.trim()
+                        });
+                        this.newTask = '';
+                        this.saveData();
+                    }
+                },
+                removeTask: function (groupIndex, taskIndex) {
+                    this.groups[groupIndex].tasks.splice(taskIndex, 1);
+                    this.saveData();
+                },
+                removeGroup: function (groupIndex) {
+                    this.groups.splice(groupIndex, 1);
+                    this.saveData();
+                },
+                deleteGroup: function () {
+                    if (this.groupToDelete !== null) {
+                        this.groups.splice(this.groupToDelete, 1);
+                        this.groupToDelete = null;
+                        this.saveData();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
